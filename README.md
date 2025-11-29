@@ -89,12 +89,12 @@ uv run benchmark.py --group all
 
 **Run only small, open-source models using 2-shot prompting:**
 ```bash
-uv run main.py --group small-opensource --prompt_technique 2-shots
+uv run benchmark.py --group small-opensource --prompt_technique 2-shots
 ```
 
 **Run proprietary models without reasoning steps:**
 ```bash
-uv run main.py --group proprietary --no-reasoning
+uv run benchmark.py --group proprietary --no-reasoning
 ```
 
 ## ⚙️ Configuration
