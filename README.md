@@ -1,182 +1,161 @@
-# LLM Text-to-SQL Benchmark Tool
+# LLM to SQL Benchmark Suite
 
-A Python-based tool for benchmarking the performance of various Large Language Models (LLMs) on Text-to-SQL tasks using a local SQLite database.
+A Python framework for evaluating Large Language Models (LLMs) on their ability to generate accurate SQL queries from natural language questions. This tool supports both proprietary APIs (Gemini, OpenRouter) and local models (via LM Studio), providing a detailed accuracy report based on actual query execution results.
 
-This tool allows you to systematically test different models—both local models via LM Studio and cloud-based models via APIs—against a predefined set of natural language questions and their correct SQL counterparts.
+## 🚀 Features
 
-## Table of Contents
+*   **Multi-Backend Support**: Connects to OpenAI-compatible endpoints (OpenRouter, LM Studio) and Google Gemini.
+*   **Execution-Based Evaluation**: Validates SQL not by string comparison, but by executing the query on a SQLite database and comparing the returned rows against ground truth.
+*   **Flexible Grouping**: Run benchmarks on specific subsets of models (e.g., `small`, `opensource`, `proprietary`).
+*   **Prompt Engineering**: Supports Zero-shot, Few-shot (1-5 examples), and reasoning toggle options.
+*   **Detailed Reporting**: Generates JSON reports with latency metrics, generated SQL, and accuracy scores.
 
-- [Features](#features)
-- [Project Structure](#project-structure)
-- [Setup and Installation](#setup-and-installation)
-- [Configuration](#configuration)
-- [How to Run the Benchmark](#how-to-run-the-benchmark)
-- [Extending the Tool](#extending-the-tool)
-  - [Adding New Test Cases](#adding-new-test-cases)
-  - [Adding New LLMs](#adding-new-llms)
-- [License](#license)
+## 📂 Project Structure
 
-## Features
-
-- **Multi-Model Benchmarking**: Test proprietary APIs (OpenAI, Gemini) and local open-source models (via LM Studio) with the same code.
-- **Modular Design**: A clean separation of concerns makes the code easy to read, maintain, and extend.
--   - `db_handler.py` for all database interactions.
--   - `llm_connectors.py` for all API calls.
-- **Data-Driven Tests**: Test cases are defined in a simple `queries.json` file, allowing you to add new tests without changing any Python code.
-- **Result Validation**: Automatically executes the LLM-generated SQL and compares its output against the "ground truth" result.
-- **Clear Reporting**: Provides console output detailing the generated SQL, execution status (success/failure), and result correctness for each model and query.
-
-## Project Structure
-
-The project is organized with a clear and scalable structure:
-
-```
-llm-sql-benchmark/
-├── .gitignore          # Files to be ignored by Git
-├── README.md           # This file
-├── requirements.txt    # Python dependencies
-├── .env                # For storing secret API keys (local only)
-├── config.py           # Central configuration for paths and models
-│
+```text
+├── config.py             # Configuration: Paths, Model Registry, Prompt Templates
+├── benchmark.py          # Entry point: Benchmark execution logic
+├── db_handler.py         # Database context manager and execution
+├── llm_connectors.py     # API client initialization and request handling
+├── pyproject.toml        # Project dependencies (uv managed)
+├── uv.lock               # Lockfile for reproducible environments
 ├── data/
-│   └── Biblioteca.db   # The SQLite database
-│
-├── results/            # Directory for storing output reports
-│
+│   └── library.db        # The SQLite database used for testing
 ├── test_cases/
-│   └── queries.json    # Test queries in JSON format
-│
-└── src/
-    ├── __init__.py
-    ├── benchmark.py      # Main script to run the benchmark
-    ├── db_handler.py     # Handles all database operations
-    └── llm_connectors.py # Handles all connections to LLMs
+│   └── queries.json      # Questions and expected ground truth results
+└── results/              # Output directory for benchmark JSON reports
 ```
 
-## Setup and Installation
+## 🛠️ Installation & Setup
 
-Follow these steps to get the project running on your local machine.
+This project uses [uv](https://github.com/astral-sh/uv) for fast dependency management and execution.
 
-**1. Prerequisites**
-- Python 3.8+
-- Git
+1.  **Install uv** (if you haven't already):
+    ```bash
+    # On macOS/Linux
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+    
+    # On Windows
+    powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+    ```
 
-**2. Clone the Repository**
+2.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/your-username/llm-sql-benchmark.git
+    cd llm-sql-benchmark
+    ```
+
+3.  **Sync Dependencies:**
+    Initialize the environment and install dependencies defined in `pyproject.toml`:
+    ```bash
+    uv sync
+    ```
+
+4.  **Set up Environment Variables:**
+    Create a `.env` file or export your API keys:
+    ```bash
+    export OPENROUTER_API_KEY="sk-or-..."
+    export GEMINI_API_KEY="AIzaSy..."
+    # OpenAI key if using standard OpenAI models
+    export OPENAI_API_KEY="sk-..."
+    ```
+
+5.  **Local Models (LM Studio):**
+    If testing local models:
+    1.  Open **LM Studio**.
+    2.  Load a model (e.g., `Llama-3-8B`).
+    3.  Start the **Local Server** on port `1234`.
+
+## 🏃 Usage
+
+You can run the benchmark directly using `uv run`, which automatically handles the virtual environment.
+
+### Basic Command
+Run all models defined in the registry:
 ```bash
-git clone https://github.com/your-username/llm-sql-benchmark.git
-cd llm-sql-benchmark
+uv run benchmark.py --group all
 ```
 
-**3. Create a Virtual Environment (Recommended)**
-This keeps your project dependencies isolated.
-- For macOS/Linux:
-  ```bash
-  python3 -m venv venv
-  source venv/bin/activate
-  ```- For Windows:
-  ```bash
-  python -m venv venv
-  .\venv\Scripts\activate
-  ```
+### Command Line Arguments
 
-**4. Install Dependencies**
+| Argument | Description | Default | Options |
+| :--- | :--- | :--- | :--- |
+| `--group` | Which set of models to test. | `all` | `small`, `medium`, `large`, `opensource`, `proprietary`, `all` |
+| `--prompt_technique` | Strategy for prompting the LLM. | `zero-shot` | `zero-shot`, `1-shot`, `2-shots`, `few-shots` |
+| `--system_prompt` | Include the expert system prompt. | `True` | (Flag: omit to disable) |
+| `--reasoning` | Enable/Disable reasoning tokens (e.g., `/no_think` for local models). | `True` | (Flag: omit to disable) |
+
+### Examples
+
+**Run only small, open-source models using 2-shot prompting:**
 ```bash
-pip install -r requirements.txt
+uv run main.py --group small-opensource --prompt_technique 2-shots
 ```
 
-## Configuration
-
-Sensitive information like API keys is managed using a `.env` file.
-
-**1. Create the `.env` file**
-Copy the example file to create your own local configuration:
+**Run proprietary models without reasoning steps:**
 ```bash
-cp .env.example .env
-```
-*(You may need to create an `.env.example` file first if it doesn't exist)*
-
-**2. Edit the `.env` file**
-Open the `.env` file and add your API keys for the services you want to use. The file is already listed in `.gitignore` to prevent it from being committed to version control.
-
-```
-# .env
-OPENAI_API_KEY="sk-..."
-GEMINI_API_KEY="..."
-# Add other keys as needed
+uv run main.py --group proprietary --no-reasoning
 ```
 
-## How to Run the Benchmark
+## ⚙️ Configuration
 
-The main script `src/benchmark.py` orchestrates the entire process.
+### Adding New Models
+Open `config.py` and add an entry to the `MODEL_REGISTRY` list.
 
-**1. To Test Local Models (via LM Studio):**
-   a. Open the LM Studio application.
-   b. Download the models you want to test from the "Search" tab.
-   c. Go to the "Local Server" tab (icon: `<->`).
-   d. Select a model from the dropdown at the top and wait for it to load.
-   e. Click **Start Server**.
-   f. Leave the server running.
-
-**2. Run the Python Script**
-Open your terminal (with the virtual environment activated) and run:
-```bash
-python src/benchmark.py
+```python
+MODEL_REGISTRY = [
+    {
+        "name": "My-New-Model-7B",       # Friendly name for reports
+        "id": "vendor/model-name-v1",    # API Model ID
+        "client": "OpenRouter",          # Must match a key in llm_connectors.py
+        "tags": ["small", "opensource"]  # For --group filtering
+    },
+    # ...
+]
 ```
 
-The script will loop through all the queries defined in `test_cases/queries.json`, send them to the configured LLMs, execute the returned SQL, and print a detailed report to the console.
-
-## Extending the Tool
-
-The tool is designed to be easily extensible.
-
-### Adding New Test Cases
-
-You can add more questions to the benchmark without modifying any code.
-
-1.  Open the `test_cases/queries.json` file.
-2.  Add a new JSON object to the main array. Follow the existing structure:
+### Adding Test Cases
+Open `test_cases/queries.json`. Add a new object to the list. You must include the `question` and the `ground_truth_results` (the rows expected from the DB).
 
 ```json
+[
+  {
+    "id": "q_new_01",
+    "question": "How many books were published in 2020?",
+    "difficulty": "easy",
+    "ground_truth_results": [
+       {"count": 5}
+    ]
+  }
+]
+```
+
+## 📊 Results
+
+Reports are saved to the `results/` directory as JSON files:
+`benchmark_{group}_{technique}.json`.
+
+**Example Output:**
+```json
 {
-  "id": "a_unique_query_id",
-  "difficulty": "A descriptive category",
-  "question": "Your new natural language question.",
-  "ground_truth_sql": "The 100% correct SQL query that answers the question."
+  "summary": {
+    "model_performance": [
+      {
+        "model_name": "gemini-2.5-flash",
+        "average_accuracy": 95.5,
+        "queries_completed": 20
+      },
+      {
+        "model_name": "Mistral-7B",
+        "average_accuracy": 82.0,
+        "queries_completed": 20
+      }
+    ]
+  },
+  "detailed_report": [ ... ]
 }
 ```
 
-The benchmark script will automatically pick up the new query on its next run.
+## ⚖️ License
 
-### Adding New LLMs
-
-To add support for a new LLM (e.g., Anthropic's Claude):
-
-1.  **Install the necessary library**: `pip install anthropic`
-2.  **Add the API key** to your `.env` file (`ANTHROPIC_API_KEY="..."`).
-3.  **Create a connector function** in `src/llm_connectors.py`:
-    ```python
-    # In src/llm_connectors.py
-    import anthropic
-
-    def get_sql_from_claude(prompt):
-        # Your logic to call the Anthropic API
-        client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
-        # ...
-        return generated_sql
-    ```
-4.  **Add the new function to the main script** in `src/benchmark.py`:
-    ```python
-    # In src/benchmark.py
-    from .llm_connectors import get_sql_from_gpt, get_sql_from_gemini, get_sql_from_claude
-
-    llms_to_benchmark = {
-        "GPT-4": get_sql_from_gpt,
-        "Gemini-Pro": get_sql_from_gemini,
-        "Claude-3": get_sql_from_claude, # Add the new model here
-        "Local Model": get_sql_from_lmstudio
-    }
-    ```
-
-## License
-
-This project is licensed under the MIT License. See the `LICENSE` file for details.
+[MIT License](LICENSE)

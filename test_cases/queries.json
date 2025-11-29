@@ -1,92 +1,618 @@
 [
   {
-    "id": "query_01",
-    "difficulty": "Simple SELECT with WHERE",
-    "question": "What is the title and publication year of the book with the ID of 12?",
-    "ground_truth_sql": "SELECT title, publication_year FROM BOOK WHERE book_id = 12;"
-  },
-  {
     "id": "query_02",
     "difficulty": "SELECT with WHERE and ORDER BY",
-    "question": "List all books in the 'Novel' genre, ordered by publication year from newest to oldest.",
-    "ground_truth_sql": "SELECT title, publication_year FROM BOOK WHERE genre = 'Novel' ORDER BY publication_year DESC;"
+    "question": "List all books in the 'comedy' genre, ordered by publication year as publication_year from newest to oldest.",
+    "ground_truth_sql": "SELECT title, publication_year FROM BOOK WHERE genre = 'comedy' ORDER BY publication_year DESC;",
+    "ground_truth_results": [
+      {
+      "title": "Big Mommas: Like Father, Like Son",
+      "publication_year": 2014
+      },
+      {
+      "title": "Across the Wide Missouri",
+      "publication_year": 2012
+      },
+      {
+      "title": "Evening Star, The",
+      "publication_year": 2009
+      },
+      {
+      "title": "Cuba",
+      "publication_year": 2006
+      },
+      {
+      "title": "40 Days and 40 Nights",
+      "publication_year": 2006
+      },
+      {
+      "title": "Nameless, The (Los sin nombre)",
+      "publication_year": 1981
+      },
+      {
+      "title": "Molly",
+      "publication_year": 1977
+      },
+      {
+      "title": "Apartment, The (Appartement, L')",
+      "publication_year": 1958
+      },
+      {
+      "title": "Burke and Hare",
+      "publication_year": 1957
+      },
+      {
+      "title": "Once Upon a Forest",
+      "publication_year": 1948
+      },
+      {
+      "title": "V.I.P.s, The",
+      "publication_year": 1929
+      },
+      {
+      "title": "Crossroads",
+      "publication_year": 1902
+      },
+      {
+      "title": "Entr'acte",
+      "publication_year": 1898
+      },
+      {
+      "title": "Zero Hour!",
+      "publication_year": 1892
+      },
+      {
+      "title": "Dickson Experimental Sound Film",
+      "publication_year": 1891
+      },
+      {
+      "title": "Private Function, A",
+      "publication_year": 1866
+      },
+      {
+      "title": "Mon Paradis - Der Winterpalast",
+      "publication_year": 1862
+      },
+      {
+      "title": "Carmen",
+      "publication_year": 1860
+      },
+      {
+      "title": "Three Musketeers, The",
+      "publication_year": 1858
+      },
+      {
+      "title": "Wise Kids, The",
+      "publication_year": 1854
+      },
+      {
+      "title": "Russia 88",
+      "publication_year": 1844
+      },
+      {
+      "title": "Cremaster 5",
+      "publication_year": 1839
+      },
+      {
+      "title": "No One Knows About Persian Cats (Kasi az gorbehaye irani khabar nadareh)",
+      "publication_year": 1829
+      },
+      {
+      "title": "Glimpse Inside the Mind of Charles Swan III, A",
+      "publication_year": 1822
+      },
+      {
+      "title": "Starter for 10",
+      "publication_year": 1815
+      },
+      {
+      "title": "Stacy's Knights",
+      "publication_year": 1801
+      }
+    ]
   },
   {
     "id": "query_03",
     "difficulty": "Simple INNER JOIN",
-    "question": "Show me the titles of all books written by George Orwell.",
-    "ground_truth_sql": "SELECT T1.title FROM BOOK AS T1 JOIN AUTHOR AS T2 ON T1.author_id = T2.author_id WHERE T2.surname = 'Orwell';"
+    "question": "Show me the titles of all books written by Amanda Bister.",
+    "ground_truth_sql": "SELECT T1.title FROM BOOK AS T1 JOIN AUTHOR AS T2 ON T1.author_id = T2.author_id WHERE T2.surname = 'Bister';",
+    "ground_truth_results": [
+      {
+      "title": "Green Butchers, The (Grønne slagtere, De)"
+      },
+      {
+      "title": "Un vampiro para dos"
+      },
+      {
+      "title": "Oscar and Lucinda (a.k.a. Oscar & Lucinda)"
+      },
+      {
+      "title": "Loaded Weapon 1 (National Lampoon's Loaded Weapon 1)"
+      },
+      {
+      "title": "No Place to Hide"
+      }
+    ]
   },
   {
     "id": "query_04",
     "difficulty": "Three-Table INNER JOIN",
-    "question": "What are the full names of readers who have borrowed the book 'Nineteen Eighty-Four'?",
-    "ground_truth_sql": "SELECT T2.name, T2.surname FROM BOOK_LOAN AS T1 JOIN READER AS T2 ON T1.reader_id = T2.reader_id JOIN BOOK AS T3 ON T1.book_id = T3.book_id WHERE T3.title = 'Nineteen Eighty-Four';"
+    "question": "What are the full names of readers as name and surname who have borrowed the book 'Molly'?",
+    "ground_truth_sql": "SELECT T2.name, T2.surname FROM BOOK_LOAN AS T1 JOIN READER AS T2 ON T1.reader_id = T2.reader_id JOIN BOOK AS T3 ON T1.book_id = T3.book_id WHERE T3.title = 'Molly';",
+    "ground_truth_results": [
+      {
+      "name": "Peria",
+      "surname": "Sager"
+      },
+      {
+      "name": "Tommi",
+      "surname": "Wallett"
+      },
+      {
+      "name": "Tamas",
+      "surname": "McGivena"
+      },
+      {
+      "name": "Cloris",
+      "surname": "Genny"
+      }
+    ]
   },
   {
     "id": "query_05",
-    "difficulty": "GROUP BY with COUNT",
-    "question": "Count how many books each author has in the library and show the author's full name.",
-    "ground_truth_sql": "SELECT T2.name, T2.surname, COUNT(T1.book_id) AS num_books FROM BOOK AS T1 JOIN AUTHOR AS T2 ON T1.author_id = T2.author_id GROUP BY T2.author_id;"
+    "difficulty": "GROUP BY with COUNT and HAVING",
+    "question": "Count how many books each author has in the library as num_books and show the author's full name as name and surname, but only for authors with more than 5 book.",
+    "ground_truth_sql": "SELECT T2.name, T2.surname, COUNT(T1.book_id) AS num_books FROM BOOK AS T1 JOIN AUTHOR AS T2 ON T1.author_id = T2.author_id GROUP BY T2.author_id HAVING COUNT(T1.book_id) > 5;",
+    "ground_truth_results": [
+      {
+      "name": "Brooke",
+      "surname": "Bossel",
+      "num_books": 6
+      },
+      {
+      "name": "Emelita",
+      "surname": "McKevany",
+      "num_books": 6
+      },
+      {
+      "name": "Glennis",
+      "surname": "Mayger",
+      "num_books": 6
+      },
+      {
+      "name": "Valentine",
+      "surname": "Linacre",
+      "num_books": 7
+      },
+      {
+      "name": "Golda",
+      "surname": "Snead",
+      "num_books": 6
+      },
+      {
+      "name": "Emyle",
+      "surname": "Ughetti",
+      "num_books": 7
+      },
+      {
+      "name": "Waylon",
+      "surname": "Buller",
+      "num_books": 6
+      },
+      {
+      "name": "Jewelle",
+      "surname": "Cothey",
+      "num_books": 7
+      },
+      {
+      "name": "Humberto",
+      "surname": "Leverson",
+      "num_books": 6
+      }
+    ]
   },
   {
     "id": "query_06",
-    "difficulty": "GROUP BY with SUM",
-    "question": "Calculate the total number of available copies for each book genre.",
-    "ground_truth_sql": "SELECT genre, SUM(num_copies) AS total_copies FROM BOOK GROUP BY genre;"
+    "difficulty": "Subquery with IN",
+    "question": "Find the names of all authors who have written books in the 'fantasy' genre.",
+    "ground_truth_sql": "SELECT name, surname FROM AUTHOR WHERE author_id IN (SELECT author_id FROM BOOK WHERE genre = 'fantasy');",
+    "ground_truth_results": [
+      {
+      "name": "Diannne",
+      "surname": "Barfitt"
+      },
+      {
+      "name": "Bonnie",
+      "surname": "Vany"
+      },
+      {
+      "name": "Wilhelmina",
+      "surname": "Weigh"
+      },
+      {
+      "name": "Anthea",
+      "surname": "Benninck"
+      },
+      {
+      "name": "Brooke",
+      "surname": "Bossel"
+      },
+      {
+      "name": "Lolly",
+      "surname": "Postians"
+      },
+      {
+      "name": "Pincas",
+      "surname": "Bickerton"
+      },
+      {
+      "name": "Marrissa",
+      "surname": "Jozwiak"
+      },
+      {
+      "name": "Antoinette",
+      "surname": "Wycherley"
+      },
+      {
+      "name": "Glennis",
+      "surname": "Mayger"
+      },
+      {
+      "name": "Valentine",
+      "surname": "Linacre"
+      },
+      {
+      "name": "Cacilia",
+      "surname": "Banes"
+      },
+      {
+      "name": "Dunc",
+      "surname": "Langstone"
+      },
+      {
+      "name": "Golda",
+      "surname": "Snead"
+      },
+      {
+      "name": "Hermie",
+      "surname": "Eddolls"
+      },
+      {
+      "name": "Zacherie",
+      "surname": "Abbotson"
+      },
+      {
+      "name": "Lilian",
+      "surname": "Galley"
+      },
+      {
+      "name": "Boyd",
+      "surname": "Woolward"
+      },
+      {
+      "name": "Meade",
+      "surname": "Gurnay"
+      },
+      {
+      "name": "Lurlene",
+      "surname": "Penelli"
+      },
+      {
+      "name": "Seana",
+      "surname": "Monckton"
+      },
+      {
+      "name": "Allianora",
+      "surname": "Haet"
+      },
+      {
+      "name": "Waylon",
+      "surname": "Buller"
+      },
+      {
+      "name": "Domeniga",
+      "surname": "Rulten"
+      },
+      {
+      "name": "Carilyn",
+      "surname": "Admans"
+      },
+      {
+      "name": "Jewelle",
+      "surname": "Cothey"
+      },
+      {
+      "name": "Consolata",
+      "surname": "Heater"
+      },
+      {
+      "name": "Stacee",
+      "surname": "Minet"
+      },
+      {
+      "name": "Humberto",
+      "surname": "Leverson"
+      },
+      {
+      "name": "Min",
+      "surname": "Cleave"
+      },
+      {
+      "name": "Lila",
+      "surname": "Huddleston"
+      }
+    ]
   },
   {
     "id": "query_07",
-    "difficulty": "GROUP BY with HAVING",
-    "question": "List the genres that have more than 10 copies in total across all their books.",
-    "ground_truth_sql": "SELECT genre, SUM(num_copies) AS total_copies FROM BOOK GROUP BY genre HAVING SUM(num_copies) > 10;"
-  },
-  {
-    "id": "query_08",
-    "difficulty": "Subquery with IN",
-    "question": "Find the names of all authors who have written books in the 'Fantasy' genre.",
-    "ground_truth_sql": "SELECT name, surname FROM AUTHOR WHERE author_id IN (SELECT author_id FROM BOOK WHERE genre = 'Fantasy');"
+    "difficulty": "Subquery with NOT IN",
+    "question": "Display the names of readers who have never borrowed any book.",
+    "ground_truth_sql": "SELECT name, surname FROM READER WHERE reader_id NOT IN (SELECT DISTINCT reader_id FROM BOOK_LOAN);",
+    "ground_truth_results": [
+      {
+      "name": "Germaine",
+      "surname": "Scruton"
+      },
+      {
+      "name": "Rhetta",
+      "surname": "Farrear"
+      },
+      {
+      "name": "Gillan",
+      "surname": "Castles"
+      },
+      {
+      "name": "Alistair",
+      "surname": "McGettrick"
+      },
+      {
+      "name": "Cad",
+      "surname": "Rosenhaupt"
+      },
+      {
+      "name": "Torin",
+      "surname": "Delve"
+      },
+      {
+      "name": "Nichols",
+      "surname": "Jezzard"
+      },
+      {
+      "name": "Kacey",
+      "surname": "Dolby"
+      },
+      {
+      "name": "Danila",
+      "surname": "Ding"
+      },
+      {
+      "name": "Sheila",
+      "surname": "Joselovitch"
+      },
+      {
+      "name": "Cordula",
+      "surname": "Hearthfield"
+      },
+      {
+      "name": "Cher",
+      "surname": "Eouzan"
+      },
+      {
+      "name": "Gerty",
+      "surname": "Pillans"
+      },
+      {
+      "name": "Katha",
+      "surname": "McGarrity"
+      },
+      {
+      "name": "Karon",
+      "surname": "Swinerd"
+      },
+      {
+      "name": "Willem",
+      "surname": "Gilliam"
+      },
+      {
+      "name": "Ali",
+      "surname": "Kibble"
+      },
+      {
+      "name": "Adamo",
+      "surname": "Stooke"
+      },
+      {
+      "name": "Durant",
+      "surname": "O'Henehan"
+      },
+      {
+      "name": "Aldridge",
+      "surname": "Ring"
+      }
+    ]
   },
   {
     "id": "query_09",
-    "difficulty": "Subquery with NOT IN",
-    "question": "Display the names of readers who have never borrowed any book.",
-    "ground_truth_sql": "SELECT name, surname FROM READER WHERE reader_id NOT IN (SELECT DISTINCT reader_id FROM BOOK_LOAN);"
+    "difficulty": "Advanced JOIN with Aggregation and LIMIT",
+    "question": "What is the name of the employee as name and surname who is responsible for the room with the highest capacity?",
+    "ground_truth_sql": "SELECT T2.name, T2.surname FROM ROOM AS T1 JOIN EMPLOYEE AS T2 ON T1.responsible_employee_id = T2.employee_id ORDER BY T1.capacity DESC LIMIT 1;",
+    "ground_truth_results": [
+      {
+      "name": "Kathleen",
+      "surname": "Skirvane"
+      }
+    ]
   },
   {
     "id": "query_10",
-    "difficulty": "Date Function with JOIN",
-    "question": "Which books are still on loan that were borrowed in October 2024?",
-    "ground_truth_sql": "SELECT T2.title FROM BOOK_LOAN AS T1 JOIN BOOK AS T2 ON T1.book_id = T2.book_id WHERE T1.return_date IS NULL AND STRFTIME('%Y-%m', T1.loan_date) = '2024-10';"
-  },
-  {
-    "id": "query_11",
-    "difficulty": "Advanced JOIN with Aggregation and LIMIT",
-    "question": "What is the name of the employee who is responsible for the room with the highest capacity?",
-    "ground_truth_sql": "SELECT T2.name, T2.surname FROM ROOM AS T1 JOIN EMPLOYEE AS T2 ON T1.responsible_employee_id = T2.employee_id ORDER BY T1.capacity DESC LIMIT 1;"
+    "difficulty": "Nested Query / Common Table Expression (CTE)",
+    "question": "Find the title of the book that has been loaned out the most times.",
+    "ground_truth_sql": "SELECT T2.title FROM BOOK_LOAN AS T1 JOIN BOOK AS T2 ON T1.book_id = T2.book_id GROUP BY T1.book_id ORDER BY COUNT(T1.book_id) DESC LIMIT 1;",
+    "ground_truth_results": [
+      {
+      "title": "Springsteen & I"
+      }
+    ]
   },
   {
     "id": "query_12",
-    "difficulty": "Nested Query / Common Table Expression (CTE)",
-    "question": "Find the title of the book that has been loaned out the most times.",
-    "ground_truth_sql": "SELECT T2.title FROM BOOK_LOAN AS T1 JOIN BOOK AS T2 ON T1.book_id = T2.book_id GROUP BY T1.book_id ORDER BY COUNT(T1.book_id) DESC LIMIT 1;"
+    "difficulty": "Self-Join Logic",
+    "question": "List pairs of readers who subscribed to the library on the exact same date as name_A ,surname_A, name_B, surname_B. Show the names of both readers and the date as subscription_date.",
+    "ground_truth_sql": "SELECT A.name, A.surname, B.name, B.surname, A.subscription_date FROM READER A, READER B WHERE A.reader_id < B.reader_id AND A.subscription_date = B.subscription_date;",
+    "ground_truth_results": [
+      {
+      "name_A": "Godfry",
+      "surname_A": "Boddam",
+      "name_B": "Gabby",
+      "surname_B": "Bryde",
+      "subscription_date": "7/16/2021"
+      },
+      {
+      "name_A": "Richart",
+      "surname_A": "Adami",
+      "name_B": "Magda",
+      "surname_B": "Duley",
+      "subscription_date": "3/28/2020"
+      },
+      {
+      "name_A": "Chic",
+      "surname_A": "Ingerith",
+      "name_B": "Katha",
+      "surname_B": "McGarrity",
+      "subscription_date": "11/14/2023"
+      },
+      {
+      "name_A": "Robb",
+      "surname_A": "Kershaw",
+      "name_B": "Goldy",
+      "surname_B": "Birth",
+      "subscription_date": "9/9/2021"
+      },
+      {
+      "name_A": "Gretna",
+      "surname_A": "covino",
+      "name_B": "Bridie",
+      "surname_B": "Vales",
+      "subscription_date": "7/8/2020"
+      },
+      {
+      "name_A": "Belinda",
+      "surname_A": "Olek",
+      "name_B": "Carter",
+      "surname_B": "Fairtlough",
+      "subscription_date": "3/27/2024"
+      },
+      {
+      "name_A": "Hank",
+      "surname_A": "Graalmans",
+      "name_B": "Johnath",
+      "surname_B": "Borley",
+      "subscription_date": "9/15/2023"
+      },
+      {
+      "name_A": "Carie",
+      "surname_A": "Timmes",
+      "name_B": "Neala",
+      "surname_B": "Offer",
+      "subscription_date": "9/2/2023"
+      },
+      {
+      "name_A": "Bernice",
+      "surname_A": "Evins",
+      "name_B": "Gonzales",
+      "surname_B": "Thoumas",
+      "subscription_date": "11/14/2025"
+      },
+      {
+      "name_A": "Dorry",
+      "surname_A": "de Copeman",
+      "name_B": "Cloris",
+      "surname_B": "Genny",
+      "subscription_date": "11/24/2023"
+      }
+    ]
   },
   {
     "id": "query_13",
-    "difficulty": "Relational Division (Advanced)",
-    "question": "Find the names of readers who have borrowed all books written by author Jane Austen.",
-    "ground_truth_sql": "SELECT T2.name, T2.surname FROM BOOK_LOAN AS T1 JOIN READER AS T2 ON T1.reader_id = T2.reader_id JOIN BOOK AS T3 ON T1.book_id = T3.book_id JOIN AUTHOR AS T4 ON T3.author_id = T4.author_id WHERE T4.surname = 'Austen' GROUP BY T1.reader_id HAVING COUNT(DISTINCT T1.book_id) = (SELECT COUNT(book_id) FROM BOOK WHERE author_id = (SELECT author_id FROM AUTHOR WHERE surname = 'Austen'));"
-  },
-  {
-    "id": "query_14",
-    "difficulty": "Self-Join Logic",
-    "question": "List pairs of readers who subscribed to the library on the exact same date. Show the names of both readers and the date.",
-    "ground_truth_sql": "SELECT A.name, A.surname, B.name, B.surname, A.subscription_date FROM READER A, READER B WHERE A.reader_id < B.reader_id AND A.subscription_date = B.subscription_date;"
-  },
-  {
-    "id": "query_15",
     "difficulty": "Complex Aggregation with Multiple JOINs",
-    "question": "Show each room's name, the full name of the employee responsible for it, and the number of reservations that have been made for that room.",
-    "ground_truth_sql": "SELECT R.name AS room_name, E.name || ' ' || E.surname AS employee_name, COUNT(RR.room_id) AS number_of_reservations FROM ROOM AS R LEFT JOIN EMPLOYEE AS E ON R.responsible_employee_id = E.employee_id LEFT JOIN ROOM_RESERVATION AS RR ON R.room_id = RR.room_id GROUP BY R.room_id, employee_name;"
+    "question": "Show each room's name as room_name, the full name of the employee responsible for it as employee_name, and the number of reservations as number_of_reservations that have been made for that room.",
+    "ground_truth_sql": "SELECT R.name AS room_name, E.name || ' ' || E.surname AS employee_name, COUNT(RR.room_id) AS number_of_reservations FROM ROOM AS R LEFT JOIN EMPLOYEE AS E ON R.responsible_employee_id = E.employee_id LEFT JOIN ROOM_RESERVATION AS RR ON R.room_id = RR.room_id GROUP BY R.room_id, employee_name;",
+    "ground_truth_results": [
+      {
+      "room_name": "Support",
+      "employee_name": "Nari Hamner",
+      "number_of_reservations": 5
+      },
+      {
+      "room_name": "Training",
+      "employee_name": "Mike Jarley",
+      "number_of_reservations": 6
+      },
+      {
+      "room_name": "Sales",
+      "employee_name": "Ave Bellin",
+      "number_of_reservations": 5
+      },
+      {
+      "room_name": "Sales",
+      "employee_name": "Isador Jaffrey",
+      "number_of_reservations": 7
+      },
+      {
+      "room_name": "Legal",
+      "employee_name": "Myranda Chamberlain",
+      "number_of_reservations": 5
+      },
+      {
+      "room_name": "Human Resources",
+      "employee_name": "Mike Jarley",
+      "number_of_reservations": 11
+      },
+      {
+      "room_name": "Training",
+      "employee_name": "Myranda Chamberlain",
+      "number_of_reservations": 6
+      },
+      {
+      "room_name": "Support",
+      "employee_name": "Alexandros Monery",
+      "number_of_reservations": 6
+      },
+      {
+      "room_name": "Accounting",
+      "employee_name": "Kathleen Skirvane",
+      "number_of_reservations": 4
+      },
+      {
+      "room_name": "Marketing",
+      "employee_name": "Myranda Chamberlain",
+      "number_of_reservations": 8
+      },
+      {
+      "room_name": "Human Resources",
+      "employee_name": "Myranda Chamberlain",
+      "number_of_reservations": 6
+      },
+      {
+      "room_name": "Business Development",
+      "employee_name": "Amalea Jennick",
+      "number_of_reservations": 11
+      },
+      {
+      "room_name": "Research and Development",
+      "employee_name": "Xena Dorrins",
+      "number_of_reservations": 5
+      },
+      {
+      "room_name": "Support",
+      "employee_name": "Bartlet Coldbathe",
+      "number_of_reservations": 10
+      },
+      {
+      "room_name": "Support",
+      "employee_name": "Kathleen Skirvane",
+      "number_of_reservations": 5
+      }
+    ]
   }
 ]

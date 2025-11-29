@@ -1,0 +1,26 @@
+[
+    {
+    "id": "query_01",
+    "difficulty": "Simple SELECT with WHERE",
+    "question": "What is the title and publication year of the book with the ID of 12?",
+    "ground_truth_sql": "SELECT title, publication_year FROM BOOK WHERE book_id = 12;",
+    "ground_truth_results": [
+      {
+        "title": "From Paris with Love",
+        "publication_year": 2020
+      }
+    ]
+    },
+    {
+    "id": "query_11",
+    "difficulty": "Relational Division (Advanced)",
+    "question": "Find the names of readers who have borrowed all books written by author Maurene Blamires.",
+    "ground_truth_sql": "SELECT T2.name, T2.surname FROM BOOK_LOAN AS T1 JOIN READER AS T2 ON T1.reader_id = T2.reader_id JOIN BOOK AS T3 ON T1.book_id = T3.book_id JOIN AUTHOR AS T4 ON T3.author_id = T4.author_id WHERE T4.surname = 'Blamires' GROUP BY T1.reader_id HAVING COUNT(DISTINCT T1.book_id) = (SELECT COUNT(book_id) FROM BOOK WHERE author_id = (SELECT author_id FROM AUTHOR WHERE surname = 'Blamires'));"
+    },
+    {   
+    "id": "query_08",
+    "difficulty": "Date Function with JOIN",
+    "question": "Which books are still on loan that were borrowed in October 2024?",
+    "ground_truth_sql": "SELECT T2.title FROM BOOK_LOAN AS T1 JOIN BOOK AS T2 ON T1.book_id = T2.book_id WHERE T1.return_date IS NULL AND STRFTIME('%Y-%m', T1.loan_date) = '2024-10';"
+    }
+]

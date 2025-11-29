@@ -1,0 +1,10 @@
+insert into EMPLOYEE (employee_id, name, surname, role, hire_date, email, phone) values (1, 'Isador', 'Jaffrey', 'Director', '10/9/2020', 'ijaffrey0@creativecommons.org', '690-920-6013');
+insert into EMPLOYEE (employee_id, name, surname, role, hire_date, email, phone) values (2, 'Ave', 'Bellin', 'Librarian', '11/26/2004', 'abellin1@ow.ly', '342-565-0367');
+insert into EMPLOYEE (employee_id, name, surname, role, hire_date, email, phone) values (3, 'Alexandros', 'Monery', 'Assistant', '2/26/2001', 'amonery2@xing.com', '894-588-6746');
+insert into EMPLOYEE (employee_id, name, surname, role, hire_date, email, phone) values (4, 'Nari', 'Hamner', 'Technician', '10/10/2000', 'nhamner3@blogger.com', '469-940-4440');
+insert into EMPLOYEE (employee_id, name, surname, role, hire_date, email, phone) values (5, 'Amalea', 'Jennick', 'Archivist', '5/15/2016', 'ajennick4@wikispaces.com', '386-934-8210');
+insert into EMPLOYEE (employee_id, name, surname, role, hire_date, email, phone) values (6, 'Bartlet', 'Coldbathe', 'Director', '4/22/2001', 'bcoldbathe5@foxnews.com', '549-237-5105');
+insert into EMPLOYEE (employee_id, name, surname, role, hire_date, email, phone) values (7, 'Mike', 'Jarley', 'Librarian', '4/24/2007', 'mjarley6@wsj.com', '646-934-8245');
+insert into EMPLOYEE (employee_id, name, surname, role, hire_date, email, phone) values (8, 'Xena', 'Dorrins', 'Assistant', '4/25/2007', 'xdorrins7@domainmarket.com', '211-144-9314');
+insert into EMPLOYEE (employee_id, name, surname, role, hire_date, email, phone) values (9, 'Kathleen', 'Skirvane', 'Technician', '12/20/2021', 'kskirvane8@nifty.com', '240-708-4177');
+insert into EMPLOYEE (employee_id, name, surname, role, hire_date, email, phone) values (10, 'Myranda', 'Chamberlain', 'Archivist', '1/6/2020', 'mchamberlain9@msn.com', '670-744-3253');

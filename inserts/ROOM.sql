@@ -1,0 +1,15 @@
+insert into ROOM (room_id, responsible_employee_id, name, capacity, floor, type) values (1, 4, 'Support', 94, 'First Floor', 'Reading');
+insert into ROOM (room_id, responsible_employee_id, name, capacity, floor, type) values (2, 7, 'Training', 69, 'Basement', 'Reading');
+insert into ROOM (room_id, responsible_employee_id, name, capacity, floor, type) values (3, 2, 'Sales', 46, 'First Floor', 'Reading');
+insert into ROOM (room_id, responsible_employee_id, name, capacity, floor, type) values (4, 1, 'Sales', 118, 'Ground Floor', 'Multimedia');
+insert into ROOM (room_id, responsible_employee_id, name, capacity, floor, type) values (5, 10, 'Legal', 41, 'Ground Floor', 'Study');
+insert into ROOM (room_id, responsible_employee_id, name, capacity, floor, type) values (6, 7, 'Human Resources', 18, 'Ground Floor', 'Study');
+insert into ROOM (room_id, responsible_employee_id, name, capacity, floor, type) values (7, 10, 'Training', 33, 'Ground Floor', 'Study');
+insert into ROOM (room_id, responsible_employee_id, name, capacity, floor, type) values (8, 3, 'Support', 116, 'Second Floor', 'Study');
+insert into ROOM (room_id, responsible_employee_id, name, capacity, floor, type) values (9, 9, 'Accounting', 145, 'Ground Floor', 'Study');
+insert into ROOM (room_id, responsible_employee_id, name, capacity, floor, type) values (10, 10, 'Marketing', 59, 'First Floor', 'Multimedia');
+insert into ROOM (room_id, responsible_employee_id, name, capacity, floor, type) values (11, 10, 'Human Resources', 109, 'First Floor', 'Reading');
+insert into ROOM (room_id, responsible_employee_id, name, capacity, floor, type) values (12, 5, 'Business Development', 56, 'First Floor', 'Kids');
+insert into ROOM (room_id, responsible_employee_id, name, capacity, floor, type) values (13, 8, 'Research and Development', 41, 'First Floor', 'Conference');
+insert into ROOM (room_id, responsible_employee_id, name, capacity, floor, type) values (14, 6, 'Support', 100, 'First Floor', 'Kids');
+insert into ROOM (room_id, responsible_employee_id, name, capacity, floor, type) values (15, 9, 'Support', 36, 'Ground Floor', 'Reading');
